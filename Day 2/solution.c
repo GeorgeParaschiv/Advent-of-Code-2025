@@ -1,69 +1,22 @@
 #include "utils.h"
 
-#define DAY 1
+#define DAY 2 
 
 typedef struct solution {
     uint32_t part1;
     uint32_t part2;
 } solution;
 
-STATUS readRotations(int *rotations) {
+STATUS solve(solution* sols) {
     STATUS result = SUCCESS;
     
-    FILE * fp = fopen(FILENAME, "r");
-    if (!fp) {
-        result = MISSING_FILE;
-    } else {
-        char direction; 
-        int value;
-        for (uint32_t i = 0; i < LINECOUNT; i++) {
-            fscanf(fp, " %c%d", &direction, &value);
-            if (direction == 'L') value = -value;
-            rotations[i] = value;
-        }
-
-        fclose(fp);
-    }
-
-    return result;
-}
-
-uint32_t numZeros(int* rotations) {
-    
-    int start = 50;
-    uint32_t count = 0;
-    for (uint32_t i = 0; i < LINECOUNT; i++) {
-        start += (rotations[i] % 100);
-
-        if (start < 0) {
-            start += 100;
-        } else if (start >= 100) {
-            start -= 100;
-        }
-
-        if (start == 0) {
-            count++;
-        }
-    }
-
-    return count;
-}
-
-STATUS solve(solution *sols) {
-    STATUS result = SUCCESS;
-    int rotations[LINECOUNT];
-
     // ----- PART 1 -----
 
     startTime(PART1);    
 
-    if ((result = readRotations(rotations)) != SUCCESS) {
-       ERROR("Failed to read rotations from input file", result);
-    } else {
-       sols->part1 = numZeros(rotations); 
-    }
 
-    stopTime(PART1); 
+
+    stopTime(PART1);
     
     // ----- PART 2 -----
 
@@ -101,3 +54,4 @@ int main() {
 
     return 0;
 }
+

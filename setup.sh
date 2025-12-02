@@ -38,10 +38,16 @@ setup_day() {
     echo "$path solution already exists"
   else
     cp "utils/template.c" "$path/solution.c"
+    sed -i "3s/^\(.\{12\}\)./\1$day/" "$path/solution.c"
   fi
 
   # Touch to create files as it won't overwrite files if already existing
-  touch "$path/input.txt"
+  if [[ -e "$path/input.txt" ]]; then
+    echo "$path input already exists"
+  else
+    source ".aoc_session"
+    curl "https://adventofcode.com/2025/day/$day/input" -H "Cookie: session=$SESSION" -o "$path/input.txt"
+  fi
 
   cd "$path"
 }

@@ -1,16 +1,28 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <time.h>
 
 // ----- TIMER -----
 
-typedef struct timespec TIME; 
-extern TIME EXECUTION_TIME;
+typedef struct timespec TIME;
 
-void startTime();
-void stopTime();
+typedef struct timer {
+    TIME start;
+    TIME end;
+} TIMER;
 
-const char* getTimestamp(TIME t);
+extern TIMER* PART1;
+extern TIMER* PART2;
+
+void initTimers();
+void freeTimers();
+
+void startTime(TIMER* tm);
+void stopTime(TIMER* tm);
+
+const char* getTimestamp(TIMER* tm);
 
 // ----- STATUS -----
 
@@ -22,7 +34,7 @@ typedef enum {
 extern const char* status[];
 
 #define ERROR(msg, code) printf("%s, CODE = %s\r\n", (msg), status[(code)])
-#define SOLUTION(day, solution) printf("Day %u\r\nSolution: %u\r\nExecution Time: %s\r\n", (day), (solution), getTimestamp(EXECUTION_TIME));
+
 // ----- FILE IO -----
 
 #define FILENAME "input.txt"

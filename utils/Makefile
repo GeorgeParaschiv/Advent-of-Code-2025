@@ -15,4 +15,4 @@ $(UTILS)/utils.o: $(UTILS)/utils.c $(UTILS)/utils.h
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJECTS) *.txt
+	rm -f $(TARGET) $(OBJECTS)

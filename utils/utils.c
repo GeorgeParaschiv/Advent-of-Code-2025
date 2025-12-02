@@ -1,7 +1,4 @@
 #include "utils.h"
-#include <bits/time.h>
-#include <sys/time.h>
-#include <time.h>
 
 // ----- STATUS -----
 
@@ -32,14 +29,32 @@ STATUS getFileLineCount(const char *filename) {
 
 // ----- TIMER -----
 
+TIMER* PART1;
+TIMER* PART2;
 
-TIME START, END, EXECUTION_TIME = { 0 };
+void initTimers() {
+    PART1 = malloc(sizeof(TIMER));
+    PART2 = malloc(sizeof(TIMER));
+}
 
-const char* getTimestamp(TIME t) {
+void freeTimers() {
+    free(PART1);
+    free(PART2);
+}
+
+void startTime(TIMER* tm) {
+    clock_gettime(CLOCK_REALTIME, &tm->start);
+}
+
+void stopTime(TIMER* tm) {
+    clock_gettime(CLOCK_REALTIME, &tm->end);
+}
+
+const char* getTimestamp(TIMER* tm) {
     static char timestamp[64];
-
-    long long s = (long long) t.tv_sec;
-    long long ns = (long long) t.tv_nsec;
+    
+    long long s = (long long) (tm->end.tv_sec - tm->start.tv_sec);
+    long long ns = (long long) (tm->end.tv_nsec - tm->start.tv_nsec);
 
     if (ns < 0) ns = 0;
 
@@ -62,14 +77,4 @@ const char* getTimestamp(TIME t) {
     return timestamp;
 }
 
-void startTime() {
-    clock_gettime(CLOCK_REALTIME, &START);
-}
-
-void stopTime() {
-    clock_gettime(CLOCK_REALTIME, &END);
-
-    EXECUTION_TIME.tv_sec = END.tv_sec - START.tv_sec;
-    EXECUTION_TIME.tv_nsec = END.tv_nsec - START.tv_nsec;
-}
 
