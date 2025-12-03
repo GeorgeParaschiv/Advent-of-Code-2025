@@ -28,24 +28,57 @@ STATUS readRotations(int *rotations) {
     return result;
 }
 
+int getNewPosition(int current, int rotation) {
+   current = (current + rotation) % 100;
+
+   if (current < 0) current += 100;
+
+   return current;
+}
+
 uint32_t numZeros(int* rotations) {
-    
-    int start = 50;
+    int position = 50;
     uint32_t count = 0;
+    
     for (uint32_t i = 0; i < LINECOUNT; i++) {
-        start += (rotations[i] % 100);
-
-        if (start < 0) {
-            start += 100;
-        } else if (start >= 100) {
-            start -= 100;
-        }
-
-        if (start == 0) {
+        position = getNewPosition(position, rotations[i]);
+        
+        if (position == 0) {
             count++;
         }
     }
 
+    return count;
+}
+
+uint32_t zerosCrossed(int* rotations) {
+    int position = 50;
+    int crossings = 0;
+    uint32_t count = 0;
+    for (uint32_t i = 0; i < LINECOUNT; i++) {
+        if (position == 0) {
+            crossings = rotations[i]/100;
+        } else {
+            int temp = position + rotations[i];
+
+            if (temp <= 0) {
+                count += 1;
+                crossings = temp / 100;
+            } else if (temp >= 100) {
+                crossings = temp / 100;
+            } else {
+                crossings = 0;
+            }
+        }
+
+        if (crossings < 0) {
+            count -= crossings;
+        } else { 
+            count += crossings;
+        }
+        
+        position = getNewPosition(position, rotations[i]);
+    }
     return count;
 }
 
@@ -69,7 +102,7 @@ STATUS solve(solution *sols) {
 
     startTime(PART2);
 
-
+    sols->part2 = zerosCrossed(rotations);
 
     stopTime(PART2);
 
