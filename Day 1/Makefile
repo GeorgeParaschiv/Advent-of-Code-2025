@@ -1,17 +1,17 @@
-CC = gcc
-CFLAGS = -Wall -g -I../utils
+CXX = g++
+CXXFLAGS = -Wall -O3 -ffast-math -I../utils -std=c++17
 TARGET = solution
 UTILS = ../utils
 OBJECTS = solution.o $(UTILS)/utils.o
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
 	
-solution.o: solution.c
-	$(CC) $(CFLAGS) -c solution.c
+solution.o: solution.cpp
+	$(CXX) $(CXXFLAGS) -c solution.cpp
 
-$(UTILS)/utils.o: $(UTILS)/utils.c $(UTILS)/utils.h
-	$(CC) $(CFLAGS) -c $(UTILS)/utils.c -o $(UTILS)/utils.o
+$(UTILS)/utils.o: $(UTILS)/utils.cpp $(UTILS)/utils.hpp
+	$(CXX) $(CXXFLAGS) -c $(UTILS)/utils.cpp -o $(UTILS)/utils.o
 
 .PHONY: clean
 clean:

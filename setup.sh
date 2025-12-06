@@ -34,11 +34,11 @@ setup_day() {
     cp "utils/Makefile" "$path/Makefile"
   fi
   
-  if [[ -e "$path/solution.c" ]]; then
+  if [[ -e "$path/solution.cpp" ]]; then
     echo "$path solution already exists"
   else
-    cp "utils/template.c" "$path/solution.c"
-    sed -i "3s/^\(.\{12\}\)./\1$day/" "$path/solution.c"
+    cp "utils/template.cpp" "$path/solution.cpp"
+    sed -i "3s/^\(.\{12\}\)./\1$day/" "$path/solution.cpp"
   fi
 
   # Touch to create files as it won't overwrite files if already existing
