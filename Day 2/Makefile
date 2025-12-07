@@ -10,7 +10,7 @@ $(TARGET): $(OBJECTS)
 solution.o: solution.cpp
 	$(CXX) $(CXXFLAGS) -c solution.cpp
 
-$(UTILS)/utils.o: $(UTILS)/utils.cpp $(UTILS)/utils.h
+$(UTILS)/utils.o: $(UTILS)/utils.cpp $(UTILS)/utils.hpp
 	$(CXX) $(CXXFLAGS) -c $(UTILS)/utils.cpp -o $(UTILS)/utils.o
 
 .PHONY: clean
