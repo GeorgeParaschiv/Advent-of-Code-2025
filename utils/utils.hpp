@@ -9,7 +9,8 @@
 
 typedef enum {
     SUCCESS,
-    MISSING_FILE
+    MISSING_FILE,
+    EMPTY_FILE
 } STATUS;
 
 extern const char* status[];
@@ -38,18 +39,21 @@ class Timer {
 
 // ----- FILE IO -----
 
-# define FILE_SIZE 8192
-
 class Input {
     std::string filename;
     Timer timer;
     
+    STATUS getRows();
+    STATUS parseRows();
+    STATUS parseRow(char delim = ',');
+
     public:
         Input(const std::string name = "input.txt");
        
         STATUS parseInput();
         const std::string getTime() const;
-
+        
+        int rows;
         std::vector<std::string> data;
 };
 

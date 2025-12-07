@@ -5,7 +5,8 @@
 
 const char* status[] = {
     "SUCCESS",
-    "MISSING_FILE"
+    "MISSING_FILE",
+    "EMPTY_FILE"
 };
 
 // ----- TIMER -----
@@ -47,23 +48,89 @@ Input::Input(const std::string name) {
 }
 
 STATUS Input::parseInput() {    
+    STATUS result;
 
     timer.start();
-    
-    std::ifstream file(filename);
-    if (!file.is_open()) {
+   
+    result = getRows();
+    if (result != SUCCESS) {
         timer.stop();
-        return MISSING_FILE;
+        return result;
     }
     
-    data.reserve(FILE_SIZE); // Pre-allocate space for data
-
-    std::string line;
-    while(std::getline(file, line)) {
-        data.push_back(std::move(line));
+    if (rows == 1) {
+        result = parseRow();
+    } else if (rows > 1) {
+        result = parseRows();
+    } else {
+        result = EMPTY_FILE;
     }
 
     timer.stop();
+
+    return result;
+}
+
+STATUS Input::getRows() {
+    rows = 0;
+
+    std::ifstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        return MISSING_FILE;
+    }
+
+    char c;
+    bool hasData = false;
+
+    while (file.get(c)) {
+        if (c == '\n') {
+            rows++;
+            hasData = false;
+        } else if (c != '\r') {
+            hasData = true;
+        }
+    }
+
+    if (hasData) rows++;
+
+    return SUCCESS;
+}
+
+STATUS Input::parseRow(char delim) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        return MISSING_FILE;
+    }
+
+    std::string line;
+    if (!std::getline(file, line)) {
+        return SUCCESS;
+    }
+
+    data.reserve(line.length() / 8);
+
+    std::istringstream iss(line);
+    std::string token;
+
+    while(std::getline(iss, token, delim)) {
+        data.push_back(std::move(token));
+    }
+
+    return SUCCESS;
+}
+
+STATUS Input::parseRows() {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        return MISSING_FILE;
+    }
+
+    data.reserve(rows);
+
+    std::string line;
+    while (std::getline(file, line)) {
+        data.push_back(std::move(line));
+    }
 
     return SUCCESS;
 }
